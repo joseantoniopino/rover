@@ -9,21 +9,18 @@ class Coordinate implements ValuesInterface
 {
     private int $value;
     private bool $isNull;
-    private bool $isInt;
+    private bool $isNumber;
     private bool $inRange;
     private bool $coordinateIsCorrect;
 
-    public function __construct(int $value)
+    public function __construct(string $value)
     {
         $this->coordinateIsCorrect = false;
+        $this->isNull = is_null($value);
+        $this->isNumber = is_numeric($value);
+        $this->inRange = !($value < 0 || $value > 200);
 
-        $this->isNull = $this->isNull($value);
-
-        $this->isInt = $this->isInt($value);
-
-        $this->inRange = $this->isInRange($value);
-
-        if (!$this->isNull && $this->isInt && $this->inRange){
+        if (!$this->isNull && $this->isNumber && $this->inRange){
             $this->value = $value;
             $this->coordinateIsCorrect = true;
         }
@@ -40,25 +37,8 @@ class Coordinate implements ValuesInterface
         return $this->coordinateIsCorrect;
     }
 
-    private function isNull($value): bool
-    {
-        return is_null($value);
-    }
-
-    private function isInt($value): bool
-    {
-        return is_int($value);
-    }
-
-    private function isInRange($value): bool
-    {
-        return !($value < 0 || $value > 200);
-    }
-
     public function __toString(): string
     {
         return $this->getValue();
     }
-
-
 }

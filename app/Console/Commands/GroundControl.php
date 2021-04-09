@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\DTO\Rover;
+use App\Domain\Rover;
 use App\Values\CardinalPoint;
 use App\Values\Coordinate;
 use Illuminate\Console\Command;
@@ -65,13 +65,13 @@ class GroundControl extends Command
         $rover = new Rover($xPosition, $yPosition, $facing);
         do {
             $exit = false;
-            $instructions = $this->choice('Waiting for orders commander (separate by commas)', Rover::INSTRUCTIONS, null, null, true);
+            $instructions = $this->choice('Waiting for orders commander (Press H for help)', Rover::INSTRUCTIONS, null, null, true);
 
             if (!$rover->canContinue())
                 $rover->setCanContinue(true);
 
-            $message = $rover->enterInstructions($instructions);
-            $this->info($message);
+            $rover->enterInstructions($instructions);
+            $this->info($rover->getOutput());
 
             if (in_array(Rover::EXIT_INSTRUCTION, $instructions))
                 $exit = true;

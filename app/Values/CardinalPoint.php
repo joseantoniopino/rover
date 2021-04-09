@@ -4,7 +4,7 @@
 namespace App\Values;
 
 
-use App\DTO\Rover;
+use App\Domain\Rover;
 use App\Interfaces\Values\ValuesInterface;
 
 class CardinalPoint implements ValuesInterface
@@ -18,9 +18,8 @@ class CardinalPoint implements ValuesInterface
     public function __construct($value)
     {
         $this->isCorrectCardinalPoint = false;
-
-        $this->isEmpty = $this->isEmpty($value);
-        $this->isInArray = $this->isInArray($value);
+        $this->isEmpty = $value == '';
+        $this->isInArray = in_array($value, Rover::COMPASS);
         if (!$this->isEmpty && $this->isInArray) {
             $this->value = $value;
             $this->isCorrectCardinalPoint = true;
@@ -35,16 +34,6 @@ class CardinalPoint implements ValuesInterface
     public function isReady(): bool
     {
         return $this->isCorrectCardinalPoint;
-    }
-
-    private function isEmpty(string $value): bool
-    {
-        return $value == '';
-    }
-
-    private function isInArray(string $value): bool
-    {
-        return in_array($value, Rover::COMPASS);
     }
 
     public function __toString(): string
