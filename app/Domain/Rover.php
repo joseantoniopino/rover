@@ -5,6 +5,7 @@ namespace App\Domain;
 
 use App\Values\Coordinate;
 use App\Values\CardinalPoint;
+use App\Values\Output;
 
 final class Rover extends Engine
 {
@@ -13,8 +14,8 @@ final class Rover extends Engine
         private Coordinate $xPosition,
         private Coordinate $yPosition,
         private CardinalPoint $facing,
+        private Output $output,
         private bool $canContinue = true,
-        private string $output = ''
     ){}
 
     public function canContinue(): bool
@@ -27,12 +28,12 @@ final class Rover extends Engine
         $this->canContinue = $bool;
     }
 
-    public function getOutput(): string
+    public function getOutput(): Output
     {
         return $this->output;
     }
 
-    public function setOutput(string $output): void
+    public function setOutput(Output $output): void
     {
         $this->output = $output;
     }

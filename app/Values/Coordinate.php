@@ -3,6 +3,7 @@
 
 namespace App\Values;
 
+use App\Domain\Rover;
 use App\Interfaces\Values\ValuesInterface;
 
 class Coordinate implements ValuesInterface
@@ -27,9 +28,14 @@ class Coordinate implements ValuesInterface
 
     }
 
-    public function getValue(): int
+    public function getValue(): int|string
     {
-        return $this->value;
+        if ($this->isReady()){
+            return $this->value;
+        } else {
+            return Rover::ERROR_OUTPUT_MESSAGE;
+        }
+
     }
 
     public function isReady(): bool

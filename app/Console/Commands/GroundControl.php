@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Domain\Rover;
 use App\Values\CardinalPoint;
 use App\Values\Coordinate;
+use App\Values\Output;
 use Illuminate\Console\Command;
 
 class GroundControl extends Command
@@ -45,7 +46,7 @@ class GroundControl extends Command
         do {
 
             do{
-                $xPosition  = new Coordinate($this->ask('Enter the X coordinate (Enter a number between 0 and 200)'));
+                $xPosition = new Coordinate($this->ask('Enter the X coordinate (Enter a number between 0 and 200)'));
             } while (!$xPosition->isReady());
 
             do{
@@ -62,7 +63,13 @@ class GroundControl extends Command
             $facingConfirmed = $this->confirm("Do you want to orient the rover to the '$facing'?");
         } while(!$facingConfirmed && $facing->isReady());
 
-        $rover = new Rover($xPosition, $yPosition, $facing);
+        // Enter welcome message
+        $message = new Output(sprintf(Rover::OUTPUT_MESSAGE, $facing, $xPosition, $yPosition));
+
+        // Initialize Rover
+        $rover = new Rover($xPosition, $yPosition, $facing, $message);
+        $this->info($rover->getOutput());
+
         do {
             $exit = false;
             $instructions = $this->choice('Waiting for orders commander (Press H for help)', Rover::INSTRUCTIONS, null, null, true);

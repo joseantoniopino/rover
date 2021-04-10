@@ -20,6 +20,7 @@ class CardinalPoint implements ValuesInterface
         $this->isCorrectCardinalPoint = false;
         $this->isEmpty = $value == '';
         $this->isInArray = in_array($value, Rover::COMPASS);
+
         if (!$this->isEmpty && $this->isInArray) {
             $this->value = $value;
             $this->isCorrectCardinalPoint = true;
@@ -28,7 +29,12 @@ class CardinalPoint implements ValuesInterface
 
     public function getValue(): string
     {
-        return $this->value;
+        if ($this->isReady()){
+            return $this->value;
+        } else {
+            return Rover::OUTPUT_MESSAGE;
+        }
+
     }
 
     public function isReady(): bool

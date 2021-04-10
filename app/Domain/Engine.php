@@ -6,6 +6,7 @@ namespace App\Domain;
 use App\Interfaces\Domain\EngineInterface;
 use App\Values\CardinalPoint;
 use App\Values\Coordinate;
+use App\Values\Output;
 
 abstract class Engine implements EngineInterface
 {
@@ -27,7 +28,7 @@ abstract class Engine implements EngineInterface
         }
     }
 
-    protected function helpMessage(): string
+    protected function helpMessage(): Output
     {
         $message =  ' - Enter orders separated by commas. For example: F,R,F,L,L' . PHP_EOL;
         $message .= ' - Coordinates information is displayed in the following format (facing: X,Y).' . PHP_EOL;
@@ -44,10 +45,10 @@ abstract class Engine implements EngineInterface
         $message .= $this->prepareOutput(" - ");
         $this->setCanContinue(false);
         $this->clearNoMessage();
-        return $message;
+        return new Output($message);
     }
 
-    protected function pivot(string $instruction): string
+    protected function pivot(string $instruction): Output
     {
         $direction = match ($instruction) {
             'R' => 'Right',
@@ -76,7 +77,7 @@ abstract class Engine implements EngineInterface
         return $this->prepareOutput($message);
     }
 
-    protected function move(): string
+    protected function move(): Output
     {
         $movementPerformed = false;
 
@@ -126,7 +127,7 @@ abstract class Engine implements EngineInterface
         return $this->prepareOutput($message);
     }
 
-    protected function bye(): string
+    protected function bye(): Output
     {
         $this->setCanContinue(false);
         $this->clearNoMessage();
@@ -155,12 +156,12 @@ abstract class Engine implements EngineInterface
         }
     }
 
-    private function prepareOutput(string $string): string
+    private function prepareOutput(string $string): Output
     {
-        return sprintf($string . self::OUTPUT_MESSAGE,
+        return new Output(sprintf($string . self::OUTPUT_MESSAGE,
             $this->getFacing(),
             $this->getXPosition(),
             $this->getYposition(),
-        );
+        ));
     }
 }
