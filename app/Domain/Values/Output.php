@@ -1,11 +1,10 @@
 <?php
 
 
-namespace App\Values;
+namespace App\Domain\Values;
 
-
+use App\Domain\Interfaces\Values\ValuesInterface;
 use App\Domain\Rover;
-use App\Interfaces\Values\ValuesInterface;
 
 class Output implements ValuesInterface
 {

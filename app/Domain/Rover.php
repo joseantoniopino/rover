@@ -3,20 +3,25 @@
 
 namespace App\Domain;
 
-use App\Values\Coordinate;
-use App\Values\CardinalPoint;
-use App\Values\Output;
+use App\Domain\Values\Coordinate;
+use App\Domain\Values\CardinalPoint;
+use App\Domain\Values\Output;
 
 final class Rover extends Engine
 {
+    private int $i = 0;
+    private Output $output;
+    private array $table;
+    private bool $canContinue;
 
     public function __construct(
         private Coordinate $xPosition,
         private Coordinate $yPosition,
         private CardinalPoint $facing,
-        private Output $output,
-        private bool $canContinue = true,
-    ){}
+    ){
+        $this->setCanContinue(true);
+        $this->setTable();
+    }
 
     public function canContinue(): bool
     {
@@ -36,6 +41,11 @@ final class Rover extends Engine
     public function setOutput(Output $output): void
     {
         $this->output = $output;
+    }
+
+    public function getTable(): array
+    {
+        return $this->table;
     }
 
     protected function getXPosition(): Coordinate
@@ -66,5 +76,13 @@ final class Rover extends Engine
     protected function setFacing(CardinalPoint $facing): void
     {
         $this->facing = $facing;
+    }
+
+    protected function setTable(): void
+    {
+        $this->table[$this->i]['FACING'] = $this->getFacing();
+        $this->table[$this->i]['X'] = $this->getXPosition();
+        $this->table[$this->i]['Y'] = $this->getYPosition();
+        $this->i++;
     }
 }

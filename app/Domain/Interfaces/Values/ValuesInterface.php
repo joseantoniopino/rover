@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Interfaces\Values;
+namespace App\Domain\Interfaces\Values;
 
 interface ValuesInterface
 {

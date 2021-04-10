@@ -1,14 +1,14 @@
 <?php
 
 
-namespace App\Values;
+namespace App\Domain\Values;
 
+use App\Domain\Interfaces\Values\ValuesInterface;
 use App\Domain\Rover;
-use App\Interfaces\Values\ValuesInterface;
 
 class Coordinate implements ValuesInterface
 {
-    private int $value;
+    private string $value;
     private bool $isNull;
     private bool $isNumber;
     private bool $inRange;
@@ -25,17 +25,15 @@ class Coordinate implements ValuesInterface
             $this->value = $value;
             $this->coordinateIsCorrect = true;
         }
-
     }
 
-    public function getValue(): int|string
+    public function getValue(): string
     {
         if ($this->isReady()){
             return $this->value;
         } else {
             return Rover::ERROR_OUTPUT_MESSAGE;
         }
-
     }
 
     public function isReady(): bool

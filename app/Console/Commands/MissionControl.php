@@ -3,12 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Domain\Rover;
-use App\Values\CardinalPoint;
-use App\Values\Coordinate;
-use App\Values\Output;
+use App\Domain\Values\CardinalPoint;
+use App\Domain\Values\Coordinate;
+use App\Domain\Values\Output;
 use Illuminate\Console\Command;
 
-class GroundControl extends Command
+class MissionControl extends Command
 {
 
     /**
@@ -63,15 +63,16 @@ class GroundControl extends Command
             $facingConfirmed = $this->confirm("Do you want to orient the rover to the '$facing'?");
         } while(!$facingConfirmed && $facing->isReady());
 
-        // Enter welcome message
-        $message = new Output(sprintf(Rover::OUTPUT_MESSAGE, $facing, $xPosition, $yPosition));
 
         // Initialize Rover
-        $rover = new Rover($xPosition, $yPosition, $facing, $message);
-        $this->info($rover->getOutput());
+        $message = new Output(sprintf(Rover::OUTPUT_MESSAGE, $facing, $xPosition, $yPosition));
+        $rover = new Rover($xPosition, $yPosition, $facing);
+        $this->info($message);
 
+        // This loop contains the logic of the instructions that are coming to the rover
         do {
             $exit = false;
+
             $instructions = $this->choice('Waiting for orders commander (Press H for help)', Rover::INSTRUCTIONS, null, null, true);
 
             if (!$rover->canContinue())
@@ -83,7 +84,13 @@ class GroundControl extends Command
             if (in_array(Rover::EXIT_INSTRUCTION, $instructions))
                 $exit = true;
 
+
         } while(!$exit);
+
+        $this->table(
+            ['FACING', 'X', 'Y'],
+            $rover->getTable()
+        );
 
         return 0;
     }
